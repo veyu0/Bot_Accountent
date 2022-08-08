@@ -17,18 +17,21 @@ async def all_costs(message: types.Message):
 
 
 # Расходы за неделю
-async def costs_week():
-    pass
+async def costs_week(message: types.Message):
+    await message.answer('Расходы за неделю')
+    await db.costs_week_read(message)
 
 
 # Расходы за месяц
-async def costs_month():
-    pass
+async def costs_month(message: types.Message):
+    await message.answer('Расходы за месяц')
+    await db.costs_month_read(message)
 
 
 # Расходы за год
-async def costs_year():
-    pass
+async def costs_year(message: types.Message):
+    await message.answer('Расходы за год')
+    await db.costs_year_read(message)
 
 
 # Создать новую категорию расходов

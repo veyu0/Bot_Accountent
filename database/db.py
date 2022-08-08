@@ -10,7 +10,7 @@ def start_db():
         print('Database is working!')
 
     base.execute('CREATE TABLE IF NOT EXISTS categories(user_id INT, category TEXT)')
-    base.execute('CREATE TABLE IF NOT EXISTS records(user_id INT, category TEXT, amount INT, date DATE DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (category) REFERENCES categories(category))')
+    base.execute('CREATE TABLE IF NOT EXISTS records(user_id INT, category TEXT, amount TEXT, data DATE DEFAULT CURRENT_DATE, FOREIGN KEY (category) REFERENCES categories(category))')
     base.commit()
 
 
@@ -29,5 +29,23 @@ async def db_add_record(user_id: int, category: str, amount: int):
     cur.execute('INSERT INTO records (user_id, category, amount) VALUES (?, ?, ?)', (user_id, category, amount))
     base.commit()
 
+
 async def costs_week_read(message):
-    pass
+    user_id = message.from_user.id
+    for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-7 days")').fetchall():
+        await message.answer(f'Категория - {cat}, потрачено - {cost}')
+        # TODO вывести суммарные расходы
+
+
+async def costs_month_read(message):
+    user_id = message.from_user.id
+    for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-1 month")').fetchall():
+        await message.answer(f'Категория - {cat}, потрачено - {cost}')
+        # TODO вывести суммарные расходы
+
+
+async def costs_year_read(message):
+    user_id = message.from_user.id
+    for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-1 year")').fetchall():
+        await message.answer(f'Категория - {cat}, потрачено - {cost}')
+        # TODO вывести суммарные расходы
