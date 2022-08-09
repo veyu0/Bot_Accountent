@@ -34,18 +34,21 @@ async def costs_week_read(message):
     user_id = message.from_user.id
     for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-7 days")').fetchall():
         await message.answer(f'Категория - {cat}, потрачено - {cost}')
-        # TODO вывести суммарные расходы
+    for final_cost in cur.execute(f'SELECT SUM(amount) FROM records').fetchall():
+        await message.answer(f'Всего за неделю вы потратили - {final_cost[0]}')
 
 
 async def costs_month_read(message):
     user_id = message.from_user.id
     for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-1 month")').fetchall():
         await message.answer(f'Категория - {cat}, потрачено - {cost}')
-        # TODO вывести суммарные расходы
+    for final_cost in cur.execute(f'SELECT SUM(amount) FROM records').fetchall():
+        await message.answer(f'Всего за месяц вы потратили - {final_cost[0]}')
 
 
 async def costs_year_read(message):
     user_id = message.from_user.id
     for cat, cost, date in cur.execute(f'SELECT category, amount, data FROM records WHERE user_id = {user_id} AND data >= date("now", "-1 year")').fetchall():
         await message.answer(f'Категория - {cat}, потрачено - {cost}')
-        # TODO вывести суммарные расходы
+    for final_cost in cur.execute(f'SELECT SUM(amount) FROM records').fetchall():
+        await message.answer(f'Всего за год вы потратили - {final_cost[0]}')
